@@ -2,14 +2,21 @@ const webSocket = require("ws");
 const redis = require("redis");
 
 let redisClient;
+// let url = "redis://35.188.168.176:6379";
 
 (async () => {
-    redisClient = redis.createClient();
+    redisClient = redis.createClient({
+        rootNodes: [
+            {
+                url: 'http://35.188.39.234:6379/'
+            }
+        ]
+    });
     redisClient.on('error', (error) => console.log(`Redis error: ${error}`));
     await redisClient.connect();
 })();
 
-const server = new webSocket.Server({port: 8000});
+const server = new webSocket.Server({port: 9944});
 
 server.on("connection", (ws) => {
     console.log('New client connected !');
@@ -40,7 +47,7 @@ server.on("connection", (ws) => {
             const chashedData = await redisClient.get('metadata');
 
             if(chashedData) {
-                
+
                 ws.send(`Cached data: ${chashedData}`);
                 console.log(`Cached data: ${chashedData}`);
                 return;

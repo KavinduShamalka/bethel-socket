@@ -1,7 +1,7 @@
 const webSocket = require("ws");
 
 //create a localhost client
-const client = new webSocket("ws://localhost:8000");
+const client = new webSocket("ws://localhost:9944/");
 
 //handling the event when connection to server is successfull
 client.on("open", () => {
